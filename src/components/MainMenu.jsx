@@ -1,5 +1,3 @@
-// ✅ Fichier : src/components/MainMenu.jsx (corrigé avec suppression du menu desktop + effet actif + overlay)
-
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -14,6 +12,7 @@ import {
   BadgeCheck,
   BarChart3,
   Menu,
+  LogOut,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
@@ -35,9 +34,6 @@ const MainMenu = () => {
     { to: "/suggestions", label: "Suggestions", icon: Lightbulb },
     { to: "/habilitations", label: "Habilitations", icon: BadgeCheck },
     { to: "/suggestions-stats", label: "Stats Suggestions", icon: BarChart3 },
-
-    
-
   ];
 
   return (
@@ -47,17 +43,19 @@ const MainMenu = () => {
         App Métier GT
       </Link>
 
-      {/* Utilisateur + déconnexion + bouton burger */}
+      {/* Utilisateur + déconnexion + menu burger */}
       <div className="flex items-center gap-4">
-        <span className="text-sm text-gray-600">
-          {user?.nom} — <span className="italic text-gray-500">{user?.role}</span>
+        <span className="text-sm text-gray-600 hidden sm:inline">
+          {user?.nom || user?.email} — <span className="italic text-gray-500">{user?.role}</span>
         </span>
+
         <button
           onClick={logout}
-          className="text-sm text-red-500 hover:text-red-700 font-medium"
+          className="text-sm text-red-500 hover:text-red-700 font-medium flex items-center gap-1"
         >
-          Déconnexion
+          <LogOut size={16} /> Déconnexion
         </button>
+
         <button
           onClick={toggleMenu}
           className="bg-gray-900 hover:bg-gray-800 p-2 rounded-full shadow text-white"
@@ -74,10 +72,10 @@ const MainMenu = () => {
         ></div>
       )}
 
-      {/* Menu déroulant (mobile et desktop) */}
+      {/* Menu déroulant animé */}
       {menuOpen && (
-        <div className="absolute top-16 right-4 bg-gray-900 text-white rounded-xl shadow-lg p-4 space-y-2 animate-fade-down z-50 min-w-[200px]">
-          <h2 className="font-semibold text-lg text-white">Navigation</h2>
+        <div className="absolute top-16 right-4 bg-gray-900 text-white rounded-xl shadow-lg p-4 space-y-2 animate-fade-down z-50 min-w-[220px]">
+          <h2 className="font-semibold text-lg text-white mb-2">Navigation</h2>
           {items.map(({ to, label, icon: Icon }) => {
             const isActive = location.pathname === to;
             return (

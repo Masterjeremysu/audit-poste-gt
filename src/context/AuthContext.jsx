@@ -6,7 +6,6 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [loggedOut, setLoggedOut] = useState(false);
 
   useEffect(() => {
     const getSession = async () => {
@@ -30,12 +29,11 @@ export const AuthProvider = ({ children }) => {
     await supabase.auth.signOut();
     localStorage.clear();
     setUser(null);
-    setLoggedOut(true);
-    window.location.replace("/login"); // ✅ Redirection directe
+    window.location.reload(); // 🔄 recharge propre après déconnexion
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout, loggedOut }}>
+    <AuthContext.Provider value={{ user, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

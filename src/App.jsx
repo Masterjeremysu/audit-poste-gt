@@ -1,11 +1,10 @@
-// ✅ Fichier : src/App.jsx
-
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { supabase } from "./supabase";
 
 import PrivateRoute from "./routes/PrivateRoute";
+
 import Login from "./routes/Login";
 import Register from "./routes/Register";
 import Dashboard from "./routes/Dashboard";
@@ -19,47 +18,24 @@ import GestionUtilisateurs from "./routes/GestionUtilisateurs";
 import Habilitations from "./routes/Habilitations";
 import PanelControle from "./routes/PanelControle";
 import SuggestionsStats from "./routes/SuggestionsStats";
-import SessionExpiree from "./routes/SessionExpiree";
 
-import MainMenu from "./components/MainMenu"; // ✅ Menu central
+import MainMenu from "./components/MainMenu";
 
 const AppContent = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const noMenuRoutes = ["/login", "/register", "/session-expiree"];
+  const noMenuRoutes = ["/login", "/register"];
   const showMenu = !noMenuRoutes.includes(location.pathname);
-
-  // ✅ Surveillance de session Supabase
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate("/session-expiree");
-      }
-    };
-
-    checkSession();
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        navigate("/session-expiree");
-      }
-    });
-
-    return () => {
-      listener.subscription.unsubscribe();
-    };
-  }, [navigate]);
 
   return (
     <>
       {showMenu && <MainMenu />}
+
       <Routes>
-        {/* Public */}
+        {/* ✅ Routes publiques */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Privées */}
+        {/* ✅ Routes privées */}
         <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/audits" element={<PrivateRoute><Audits /></PrivateRoute>} />
@@ -72,9 +48,6 @@ const AppContent = () => {
         <Route path="/habilitations" element={<PrivateRoute><Habilitations /></PrivateRoute>} />
         <Route path="/panel" element={<PrivateRoute><PanelControle /></PrivateRoute>} />
         <Route path="/suggestions-stats" element={<PrivateRoute><SuggestionsStats /></PrivateRoute>} />
-
-        {/* Expiration */}
-        <Route path="/session-expiree" element={<SessionExpiree />} />
       </Routes>
     </>
   );

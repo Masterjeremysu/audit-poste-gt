@@ -8,28 +8,56 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getSession = async () => {
+    const loadUser = async () => {
+      setLoading(true);
       const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user || null);
+      const authUser = session?.user;
+
+      if (authUser) {
+        // 🔍 On récupère les infos de la table "utilisateurs"
+        const { data: profile, error } = await supabase
+          .from("utilisateurs")
+          .select("nom, poste, role_app")
+          .eq("id", authUser.id)
+          .single();
+
+        if (error) {
+          console.error("Erreur récupération utilisateur :", error.message);
+          setUser({ ...authUser }); // fallback minimal
+        } else {
+          // ✅ fusion des données Auth + table
+          setUser({
+            ...authUser,
+            nom: profile.nom,
+            poste: profile.poste,
+            role: profile.role_app,
+          });
+        }
+      } else {
+        setUser(null);
+      }
+
       setLoading(false);
     };
 
-    getSession();
+    loadUser();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
+      if (session?.user) {
+        loadUser(); // rafraîchit à chaque changement d'état
+      } else {
+        setUser(null);
+      }
     });
 
-    return () => {
-      listener.subscription.unsubscribe();
-    };
+    return () => listener.subscription.unsubscribe();
   }, []);
 
   const logout = async () => {
     await supabase.auth.signOut();
     localStorage.clear();
     setUser(null);
-    window.location.reload(); // 🔄 recharge propre après déconnexion
+    window.location.reload();
   };
 
   return (

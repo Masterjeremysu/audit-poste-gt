@@ -46,7 +46,7 @@ const MainMenu = () => {
       {/* Utilisateur + déconnexion + menu burger */}
       <div className="flex items-center gap-4">
         <span className="text-sm text-gray-600 hidden sm:inline">
-          {user?.nom || user?.email} — <span className="italic text-gray-500">{user?.role}</span>
+        {user?.nom} — <span className="italic">{user?.poste}</span>
         </span>
 
         <button

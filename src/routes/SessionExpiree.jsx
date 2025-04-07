@@ -1,10 +1,25 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
 
 const SessionExpiree = () => {
-  const navigate = useNavigate();
+  const [countdown, setCountdown] = useState(5);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    const timeout = setTimeout(() => {
+      localStorage.clear();
+      window.location.href = "/login";
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-100 via-yellow-100 to-orange-100 flex items-center justify-center px-4">
@@ -24,21 +39,24 @@ const SessionExpiree = () => {
         </motion.div>
 
         <h1 className="text-3xl font-bold text-red-600 mb-3">Session expirée</h1>
-        <p className="text-gray-700 text-md mb-6">
-          Votre session s'est terminée pour des raisons de sécurité. Veuillez vous reconnecter pour continuer.
+        <p className="text-gray-700 text-md mb-2">
+          Votre session a expiré pour des raisons de sécurité.
+        </p>
+        <p className="text-gray-700 text-sm mb-6">
+          Redirection automatique dans <span className="font-bold">{countdown}</span> secondes...
         </p>
 
         <motion.button
-  whileHover={{ scale: 1.05 }}
-  whileTap={{ scale: 0.95 }}
-  onClick={() => {
-    localStorage.clear();             // 🔁 On vide tout ce que Supabase a pu stocker
-    window.location.href = "/login";  // ✅ Redirection propre et complète
-  }}
-  className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl text-md transition"
->
-  🔐 Revenir à la connexion
-</motion.button>
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => {
+            localStorage.clear();
+            window.location.href = "/login";
+          }}
+          className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl text-md transition"
+        >
+          🔐 Revenir à la connexion maintenant
+        </motion.button>
       </motion.div>
     </div>
   );

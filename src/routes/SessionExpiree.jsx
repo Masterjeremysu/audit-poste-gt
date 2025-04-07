@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
-import { supabase } from "../supabase";
+import { useAuth } from "../context/AuthContext";
 
 const SessionExpiree = () => {
   const [countdown, setCountdown] = useState(5);
+  const { logout } = useAuth();
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCountdown((prev) => prev - 1);
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          logout(); // ✅ Déconnexion et redirection une seule fois
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
 
-    const redirect = async () => {
-      await supabase.auth.signOut();        // 🔐 Déconnexion Supabase
-      localStorage.clear();                 // 🧼 On nettoie tout
-      window.location.replace("/login");    // 🚪 Redirection propre sans boucle
-    };
-
-    const timeout = setTimeout(() => {
-      redirect();
-    }, 5000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, []);
+    return () => clearInterval(interval);
+  }, [logout]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-100 via-yellow-100 to-orange-100 flex items-center justify-center px-4">
@@ -55,11 +49,7 @@ const SessionExpiree = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={async () => {
-            await supabase.auth.signOut();
-            localStorage.clear();
-            window.location.replace("/login");
-          }}
+          onClick={logout}
           className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl text-md transition"
         >
           🔐 Revenir à la connexion maintenant

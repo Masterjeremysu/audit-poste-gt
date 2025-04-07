@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
+import { supabase } from "../supabase";
 
 const SessionExpiree = () => {
   const [countdown, setCountdown] = useState(5);
@@ -10,9 +11,14 @@ const SessionExpiree = () => {
       setCountdown((prev) => prev - 1);
     }, 1000);
 
+    const redirect = async () => {
+      await supabase.auth.signOut();        // 🔐 Déconnexion Supabase
+      localStorage.clear();                 // 🧼 On nettoie tout
+      window.location.replace("/login");    // 🚪 Redirection propre sans boucle
+    };
+
     const timeout = setTimeout(() => {
-      localStorage.clear();
-      window.location.href = "/login";
+      redirect();
     }, 5000);
 
     return () => {
@@ -49,9 +55,10 @@ const SessionExpiree = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => {
+          onClick={async () => {
+            await supabase.auth.signOut();
             localStorage.clear();
-            window.location.href = "/login";
+            window.location.replace("/login");
           }}
           className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl text-md transition"
         >

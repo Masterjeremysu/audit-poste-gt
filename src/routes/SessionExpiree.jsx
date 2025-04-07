@@ -29,13 +29,16 @@ const SessionExpiree = () => {
         </p>
 
         <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => navigate("/login")}
-          className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl text-md transition"
-        >
-          🔐 Revenir à la connexion
-        </motion.button>
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  onClick={() => {
+    localStorage.clear();             // 🔁 On vide tout ce que Supabase a pu stocker
+    window.location.href = "/login";  // ✅ Redirection propre et complète
+  }}
+  className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl text-md transition"
+>
+  🔐 Revenir à la connexion
+</motion.button>
       </motion.div>
     </div>
   );

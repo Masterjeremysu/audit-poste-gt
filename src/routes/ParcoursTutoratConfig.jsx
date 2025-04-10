@@ -5,12 +5,10 @@ import React, { useState, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Upload } from 'lucide-react';
 import { Card } from '@/components/ui/card';
-import Checkbox from "@/components/ui/Checkbox";
-
+import Checkbox from "@/components/ui/Checkbox"; // ✅ On garde uniquement celui-ci
 
 const tuteurs = ['Guillaume', 'Dramane', 'Gregory', 'Jérémy', 'Nicolas'];
 

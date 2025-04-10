@@ -82,7 +82,8 @@ const SidebarMenuGrouped = ({ onClose }) => {
           <div className="ml-4 space-y-1">
             <Link to="/suggestions" className="block hover:text-blue-400">💡 Suggestions</Link>
             <Link to="/suggestions-stats" className="block hover:text-blue-400">📊 Statistiques</Link>
-            <Link to="/entreprise" className="block hover:text-blue-400">🏭 Infos Entreprise</Link>
+            <Link to="/entreprise" className="block hover:text-blue-400">👥 Organigramme</Link>
+
           </div>
         )}
 

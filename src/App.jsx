@@ -11,7 +11,7 @@ import Tutorat from "./routes/Tutorat";
 import AjoutDocument from "./routes/AjoutDocument";
 import Documents from "./routes/Documents";
 import Suggestions from "./routes/Suggestions";
-import Entreprise from "./routes/Entreprise";
+import InfoEntreprise from "./routes/InfoEntreprise";
 import GestionUtilisateurs from "./routes/GestionUtilisateurs";
 import Habilitations from "./routes/Habilitations";
 import PanelControle from "./routes/PanelControle";
@@ -45,7 +45,8 @@ const AppContent = () => {
       <Route path="/documents/ajout" element={<PrivateRoute><AjoutDocument /></PrivateRoute>} />
       <Route path="/documents" element={<PrivateRoute><Documents /></PrivateRoute>} />
       <Route path="/suggestions" element={<PrivateRoute><Suggestions /></PrivateRoute>} />
-      <Route path="/entreprise" element={<PrivateRoute><Entreprise /></PrivateRoute>} />
+      <Route path="/entreprise" element={<PrivateRoute><InfoEntreprise /></PrivateRoute>} />
+
       <Route path="/utilisateurs" element={<PrivateRoute><GestionUtilisateurs /></PrivateRoute>} />
       <Route path="/habilitations" element={<PrivateRoute><Habilitations /></PrivateRoute>} />
       <Route path="/panel" element={<PrivateRoute><PanelControle /></PrivateRoute>} />

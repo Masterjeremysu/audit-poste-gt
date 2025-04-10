@@ -9,6 +9,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Upload } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import Checkbox from "@/components/ui/Checkbox";
+
 
 const tuteurs = ['Guillaume', 'Dramane', 'Gregory', 'Jérémy', 'Nicolas'];
 

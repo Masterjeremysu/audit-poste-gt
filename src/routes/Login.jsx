@@ -1,27 +1,30 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../supabase';
-import { Mail, Lock } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabase";
+import { Mail, Lock } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [motdepasse, setMotdepasse] = useState('');
-  const [erreur, setErreur] = useState('');
+  const [email, setEmail] = useState("");
+  const [motdepasse, setMotdepasse] = useState("");
+  const [erreur, setErreur] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErreur('');
+    setErreur("");
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password: motdepasse,
     });
 
     if (error) {
-      setErreur('Email ou mot de passe incorrect.');
+      console.log("Tentative de connexion avec :", email, motdepasse);
+      setErreur("Email ou mot de passe incorrect.");
     } else {
-      navigate('/');
+      // ✅ Recharge l'app proprement une fois connecté
+      window.location.href = "/";
     }
   };
 
@@ -80,9 +83,9 @@ const Login = () => {
         </form>
 
         <div className="text-sm text-center text-gray-600 mt-4">
-          Vous n’avez pas encore de compte ?{' '}
+          Vous n’avez pas encore de compte ?{" "}
           <button
-            onClick={() => navigate('/register')}
+            onClick={() => navigate("/register")}
             className="text-blue-600 hover:underline font-medium"
             type="button"
           >

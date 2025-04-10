@@ -27,7 +27,9 @@ const MainMenu = () => {
     { to: "/dashboard", label: "Accueil", icon: Home },
     { to: "/audits", label: "Audits", icon: ClipboardList },
     { to: "/tutorat", label: "Tutorat", icon: GraduationCap },
-    { to: "/wiki", label: "Wiki", icon: BookMarked },
+    { to: "/tutore", label: "Mon Parcours", icon: GraduationCap }, // 👤 Vue tutoré
+    { to: "/tuteur", label: "Suivi Tutorés", icon: Users },         // 🧑‍🏫 Vue tuteur
+   
     { to: "/documents", label: "Documents", icon: FileText },
     { to: "/utilisateurs", label: "Utilisateurs", icon: Users },
     { to: "/panel", label: "Panel de contrôle", icon: Settings },

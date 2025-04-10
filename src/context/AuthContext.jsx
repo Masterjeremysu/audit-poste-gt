@@ -1,3 +1,4 @@
+// ✅ AuthContext.jsx — version simple, fiable avec 1 seul loadUser
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../supabase";
 
@@ -9,12 +10,10 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const loadUser = async () => {
-      setLoading(true);
       const { data: { session } } = await supabase.auth.getSession();
       const authUser = session?.user;
 
       if (authUser) {
-        // 🔍 On récupère les infos de la table "utilisateurs"
         const { data: profile, error } = await supabase
           .from("utilisateurs")
           .select("nom, poste, role_app")
@@ -22,10 +21,8 @@ export const AuthProvider = ({ children }) => {
           .single();
 
         if (error) {
-          console.error("Erreur récupération utilisateur :", error.message);
-          setUser({ ...authUser }); // fallback minimal
+          setUser({ ...authUser });
         } else {
-          // ✅ fusion des données Auth + table
           setUser({
             ...authUser,
             nom: profile.nom,
@@ -44,9 +41,10 @@ export const AuthProvider = ({ children }) => {
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        loadUser(); // rafraîchit à chaque changement d'état
+        loadUser();
       } else {
         setUser(null);
+        setLoading(false);
       }
     });
 
@@ -57,8 +55,9 @@ export const AuthProvider = ({ children }) => {
     await supabase.auth.signOut();
     localStorage.clear();
     setUser(null);
-    window.location.reload();
+    window.location.href = "/login"; // ✅ redirection manuelle propre
   };
+  
 
   return (
     <AuthContext.Provider value={{ user, loading, logout }}>
